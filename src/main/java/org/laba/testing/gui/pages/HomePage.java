@@ -4,73 +4,41 @@ import com.qaprosoft.carina.core.foundation.webdriver.decorator.ExtendedWebEleme
 import com.qaprosoft.carina.core.gui.AbstractPage;
 import com.zebrunner.carina.utils.Configuration;
 import com.zebrunner.carina.utils.R;
-import java.util.List;
+import org.laba.testing.gui.components.Header;
+import org.laba.testing.gui.components.Navbar;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
 
 public class HomePage extends AbstractPage {
 
-  @FindBy(xpath = "//div[@class='md-header-nav__ellipsis']")
-  private ExtendedWebElement header;
+  @FindBy(xpath = "//header[@class='md-header']")
+  private Header header;
 
-  @FindBy(xpath = "//a[@class='md-header-nav__button md-logo']//img[@alt='logo']")
-  private ExtendedWebElement logo;
+  @FindBy(xpath = "//div[@class='md-sidebar md-sidebar--primary']")
+  private Navbar navbar;
 
-  @FindBy(xpath = "//input[@placeholder='Search']")
-  private ExtendedWebElement searchBar;
+  @FindBy(xpath = "//label[contains(text(),'%s')]")
+  private ExtendedWebElement subMenu;
 
-  @FindBy(xpath = "//div[@class='md-header-nav__source']//div[@class='md-source__repository']")
-  private ExtendedWebElement githubLink;
-
-  @FindBy(xpath = ".//li[contains(@class,'md-nav__item') and not(contains(@class,'--nested'))]")
-  private List<ExtendedWebElement> contextMenu;
-
-  @FindBy(xpath = "//label[contains(text(),'Automation')]")
-  private ExtendedWebElement automationSubMenu;
-
-  @FindBy(xpath = "//label[contains(text(),'Advanced')]")
-  private ExtendedWebElement advancedSubMenu;
-
-  @FindBy(xpath = "//label[contains(text(),'Integration')]")
-  private ExtendedWebElement integrationSubMenu;
 
   public HomePage(WebDriver driver) {
     super(driver);
-    setUiLoadedMarker(header);
+    setUiLoadedMarker(subMenu);
     setPageAbsoluteURL(R.CONFIG.get(Configuration.Parameter.URL.getKey()));
   }
 
-  public ExtendedWebElement getAutomationSubMenu() {
-    return automationSubMenu;
-  }
-
-  public ExtendedWebElement getAdvancedSubMenu() {
-    return advancedSubMenu;
-  }
-
-  public ExtendedWebElement getIntegrationSubMenu() {
-    return integrationSubMenu;
-  }
-
-  public ExtendedWebElement getGithubLink() {
-    return githubLink;
-  }
-
-  public List<ExtendedWebElement> getContextMenu() {
-    return contextMenu;
-  }
-
-  public ExtendedWebElement getSearchBar() {
-    return searchBar;
-  }
-
-  public ExtendedWebElement getHeader() {
+  public Header getHeader() {
     return header;
   }
 
-  public ExtendedWebElement getLogo() {
-    return logo;
+  public Navbar getNavbar() {
+    return navbar;
   }
+
+  public ExtendedWebElement getSubMenu() {
+    return subMenu;
+  }
+
 
 }

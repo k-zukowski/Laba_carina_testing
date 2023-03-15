@@ -1,54 +1,49 @@
 package org.laba.testing;
 
 import com.qaprosoft.carina.core.foundation.IAbstractTest;
-import com.qaprosoft.carina.core.foundation.webdriver.decorator.ExtendedWebElement;
 import com.zebrunner.carina.core.registrar.ownership.MethodOwner;
 import com.zebrunner.carina.core.registrar.tag.Priority;
 import com.zebrunner.carina.core.registrar.tag.TestPriority;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.laba.testing.gui.components.Navbar;
 import org.laba.testing.gui.pages.HomePage;
-import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class NavigationValidationTest implements IAbstractTest {
 
   @Test()
-  @MethodOwner(owner = "kzuko")
+  @MethodOwner(owner = "kzukowski")
   @TestPriority(Priority.P4)
-  public void navigationElementIsVisible() {
+  public void navigationElementIsVisibleTest() {
     HomePage homePage = new HomePage(getDriver());
     homePage.open();
     Assert.assertTrue(homePage.isPageOpened(), "Home page is not opened");
-    final List<ExtendedWebElement> contextMenu = homePage.getContextMenu();
-    Assert.assertTrue(contextMenu.size() > 0);
-    Assert.assertEquals(getDriver().findElement(
-        By.cssSelector("nav[aria-label='Navigation'] label[for='__drawer']")).getText(), "Carina");
-    System.out.println(contextMenu.get(0).getAttribute("class"));
-    Assert.assertTrue(contextMenu.get(0).getAttribute("class").endsWith("--active"));
+    Navbar navbar = homePage.getNavbar();
+    Assert.assertTrue(navbar.getSize() > 0);
+    Assert.assertEquals(navbar.getFirstElementText(getDriver()), "Carina");
+    Assert.assertTrue(navbar.getAttributeById(0,"class").endsWith("--active"));
   }
 
   @Test()
-  @MethodOwner(owner = "kzuko")
+  @MethodOwner(owner = "kzukowski")
   @TestPriority(Priority.P4)
-  public void navigationHiddenComponents() {
+  public void navigationHiddenComponentsTest() {
     HomePage homePage = new HomePage(getDriver());
     homePage.open();
     Assert.assertTrue(homePage.isPageOpened(), "Home page is not opened");
-    final List<ExtendedWebElement> contextMenu = homePage.getContextMenu();
-    ExtendedWebElement hiddenContextMenuElement = contextMenu.get(5);
-    Assert.assertFalse(hiddenContextMenuElement.isVisible());
-    homePage.getAutomationSubMenu().click();
-    Assert.assertTrue(hiddenContextMenuElement.isVisible());
+    Navbar navbar = homePage.getNavbar();
+    Assert.assertFalse(navbar.isVisibleById(5));
+    homePage.getSubMenu().format("Automation").click();
+    Assert.assertTrue(navbar.isVisibleById(5));
   }
 
   @Test()
-  @MethodOwner(owner = "kzuko")
+  @MethodOwner(owner = "kzukowski")
   @TestPriority(Priority.P4)
-  public void navigationWorksProperly() {
+  public void navigationWorksProperlyTest() {
     final Map<Integer, String> map = new HashMap<>() {{
       put(0, "http://zebrunner.github.io/carina/");
       put(1, "http://zebrunner.github.io/carina/getting_started/");
@@ -75,18 +70,18 @@ public class NavigationValidationTest implements IAbstractTest {
     for (Entry<Integer, String> entry : map.entrySet()) {
       HomePage homePage = new HomePage(getDriver());
       homePage.open();
-      if (entry.getKey() > 4 && entry.getKey() <= 8) {
-        homePage.getAutomationSubMenu().click();
-      } else if (entry.getKey() > 8 && entry.getKey() <= 17) {
-        homePage.getAdvancedSubMenu().click();
-      } else if (entry.getKey().equals(18)) {
-        homePage.getIntegrationSubMenu().click();
+      if (entry.getValue().contains("carina/automation/")) {
+        homePage.getSubMenu().format("Automation").click();
+      } else if (entry.getValue().contains("carina/advanced/")) {
+        homePage.getSubMenu().format("Advanced").click();
+      } else if (entry.getValue().contains("carina/integration/")) {
+        homePage.getSubMenu().format("Integration").click();
       }
       Assert.assertTrue(homePage.isPageOpened(), "Page is not opened");
-      List<ExtendedWebElement> contextMenu = homePage.getContextMenu();
-      contextMenu.get(entry.getKey()).click();
+      Navbar navbar = homePage.getNavbar();
+      navbar.clickById(entry.getKey());
       Assert.assertEquals(getDriver().getCurrentUrl(), entry.getValue());
-      Assert.assertTrue(contextMenu.get(entry.getKey()).getAttribute("class").endsWith("--active"));
+      Assert.assertTrue(navbar.getAttributeById(entry.getKey(),"class").endsWith("--active"));
     }
   }
 }
