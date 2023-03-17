@@ -45,8 +45,8 @@ public class Header extends AbstractUIObject {
     return this.searchBar.isElementPresent();
   }
 
-  public String getSearchBarAttribute(String attribute) {
-    return this.searchBar.getAttribute(attribute);
+  public String getSearchBarLabel() {
+    return this.searchBar.getAttribute("aria-label");
   }
 
   public boolean isGithubLinkPresent() {

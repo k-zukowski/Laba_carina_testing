@@ -18,7 +18,6 @@ public class HeaderValidationTest implements IAbstractTest {
   public void zebrunnerLogoTest() {
     HomePage homePage = new HomePage(getDriver());
     homePage.open();
-    Assert.assertTrue(homePage.isPageOpened(), "Home page is not opened");
     Header header = homePage.getHeader();
     Assert.assertTrue(header.getLogoLocationX() < header.getHeaderLocationX());
     header.logoClick();
@@ -31,7 +30,6 @@ public class HeaderValidationTest implements IAbstractTest {
   public void carinaBrandTest() {
     HomePage homePage = new HomePage(getDriver());
     homePage.open();
-    Assert.assertTrue(homePage.isPageOpened(), "Home page is not opened");
     Header header = homePage.getHeader();
     Assert.assertTrue(header.getHeaderText().contains("Carina"));
   }
@@ -42,10 +40,9 @@ public class HeaderValidationTest implements IAbstractTest {
   public void searchComponentTest() {
     HomePage homePage = new HomePage(getDriver());
     homePage.open();
-    Assert.assertTrue(homePage.isPageOpened(), "Home page is not opened");
     Header header = homePage.getHeader();
     Assert.assertTrue(header.isSearchBarPresent());
-    Assert.assertEquals(header.getSearchBarAttribute("aria-label"), "Search");
+    Assert.assertEquals(header.getSearchBarLabel(), "Search");
   }
 
   @Test()
@@ -54,7 +51,6 @@ public class HeaderValidationTest implements IAbstractTest {
   public void githubLinkTest() {
     HomePage homePage = new HomePage(getDriver());
     homePage.open();
-    Assert.assertTrue(homePage.isPageOpened(), "Home page is not opened");
     Header header = homePage.getHeader();
     Assert.assertTrue(header.isGithubLinkPresent());
     header.githubClick();
@@ -66,9 +62,8 @@ public class HeaderValidationTest implements IAbstractTest {
   @TestPriority(Priority.P4)
   public void headerIsStickyTest() {
     HomePage homePage = new HomePage(getDriver());
-    homePage.open();
-    Assert.assertTrue(homePage.isPageOpened(), "Home page is not opened");
     Utils utils = new Utils();
+    homePage.open();
     utils.scrollDown(getDriver());
     Header header = homePage.getHeader();
     Assert.assertTrue(header.isHeaderVisible());

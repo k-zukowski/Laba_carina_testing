@@ -15,7 +15,7 @@ public class HomePage extends AbstractPage {
   @FindBy(xpath = "//header[@class='md-header']")
   private Header header;
 
-  @FindBy(xpath = "//div[@class='md-sidebar md-sidebar--primary']")
+  @FindBy(xpath = "//div[contains(@class, 'md-sidebar--primary')]")
   private Navbar navbar;
 
   @FindBy(xpath = "//label[contains(text(),'%s')]")

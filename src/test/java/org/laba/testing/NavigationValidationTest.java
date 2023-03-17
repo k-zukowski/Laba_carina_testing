@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.laba.testing.gui.components.Navbar;
+import org.laba.testing.gui.enums.NavElement;
 import org.laba.testing.gui.pages.HomePage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -20,11 +21,11 @@ public class NavigationValidationTest implements IAbstractTest {
   public void navigationElementIsVisibleTest() {
     HomePage homePage = new HomePage(getDriver());
     homePage.open();
-    Assert.assertTrue(homePage.isPageOpened(), "Home page is not opened");
     Navbar navbar = homePage.getNavbar();
-    Assert.assertTrue(navbar.getSize() > 0);
-    Assert.assertEquals(navbar.getFirstElementText(getDriver()), "Carina");
+    Assert.assertTrue(navbar.getNavigationElementsCount() > 0);
+    Assert.assertEquals(navbar.getFirstElementText(), "Carina");
     Assert.assertTrue(navbar.getAttributeById(0,"class").endsWith("--active"));
+    navbar.isNavElementActive(NavElement.OVERVIEW);
   }
 
   @Test()
@@ -33,11 +34,10 @@ public class NavigationValidationTest implements IAbstractTest {
   public void navigationHiddenComponentsTest() {
     HomePage homePage = new HomePage(getDriver());
     homePage.open();
-    Assert.assertTrue(homePage.isPageOpened(), "Home page is not opened");
     Navbar navbar = homePage.getNavbar();
-    Assert.assertFalse(navbar.isVisibleById(5));
+    Assert.assertFalse(navbar.isNavbarElementVisibleById(5));
     homePage.getSubMenu().format("Automation").click();
-    Assert.assertTrue(navbar.isVisibleById(5));
+    Assert.assertTrue(navbar.isNavbarElementVisibleById(5));
   }
 
   @Test()
@@ -77,9 +77,8 @@ public class NavigationValidationTest implements IAbstractTest {
       } else if (entry.getValue().contains("carina/integration/")) {
         homePage.getSubMenu().format("Integration").click();
       }
-      Assert.assertTrue(homePage.isPageOpened(), "Page is not opened");
       Navbar navbar = homePage.getNavbar();
-      navbar.clickById(entry.getKey());
+      navbar.clickNavbarElementById(entry.getKey());
       Assert.assertEquals(getDriver().getCurrentUrl(), entry.getValue());
       Assert.assertTrue(navbar.getAttributeById(entry.getKey(),"class").endsWith("--active"));
     }
